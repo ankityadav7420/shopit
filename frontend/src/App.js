@@ -14,6 +14,7 @@ import UpdateProfile from './components/user/UpdateProfile';
 import UpdatePassword from './components/user/UpdatePassword';
 import ForgotPassword from './components/user/ForgotPassword';
 import NewPassword from './components/user/NewPassword';
+import Cart from './components/cart/Cart';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/password/update" element={<ProtectedRoute > <UpdatePassword  /></ProtectedRoute>} exact />
           <Route path="/password/forgot" element= {<ForgotPassword  />} exact />
           <Route path="/password/reset/:token" element= {<NewPassword  />} exact />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         </div>
 
