@@ -1,15 +1,18 @@
-import React, { Fragment } from 'react'
-import '../../App.css'
+import React, { Fragment } from 'react';
+import '../../App.css';
+
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <Fragment>
-        <footer className="py-1">
-            <p className="text-center mt-1">
-                Shopping Cart - 2019-2020, All Rights Reserved
-            </p>
-    </footer>
+      <footer className="py-1">
+        <p className="text-center mt-1">
+          ShoppIT {currentYear}, All Rights Reserved
+        </p>
+      </footer>
     </Fragment>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

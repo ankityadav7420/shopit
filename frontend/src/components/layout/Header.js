@@ -10,12 +10,12 @@ const Header = () => {
 
   const navigate= useNavigate();
   const dispatch = useDispatch();
-  const {user, loading}  = useSelector(state=>state.auth)
+  const { user, loading } = useSelector(state => state.auth)
   const {cartItems} = useSelector(state=>state.cart)
 
   const logoutHandler=()=>{
     dispatch(logout());
-    alert("user logout seuccesfully")
+    alert("user logedout seuccesfully")
   }
 
   return (
@@ -73,7 +73,7 @@ const Header = () => {
                  </div>
             </div>
 
-        ): loading && <Link to="/login" className="btn ml-4" id="login_btn">Login</Link>}
+        ):  <Link to="/login" className="btn ml-4" id="login_btn">Login</Link>}
       </div>
     </nav>
     </Fragment>
