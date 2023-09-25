@@ -5,6 +5,13 @@ const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const order = require('../models/order');
 
+//update stock function
+async function updateStock(id, quantity){
+    const product = await Product.findById(id);
+    product.stock = product.stock - quantity;
+    await product.save({validateBeforeSave:false});
+    console.log(product.stock,"sttttt")
+}
 //create a new order  /api/v1/order/new
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     const {
@@ -17,7 +24,9 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
         paymentInfo
 
     } = req.body;
-
+    for (const item of orderItems) {
+        await updateStock(item.product, item.quantity)
+    }
     const order = await Order.create({
         orderItems,
         shippingInfo,
@@ -29,6 +38,7 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
         paidAt: Date.now(),
         user: req.user._id
     })
+
 
     res.status(200).json({
         success: true,
@@ -94,13 +104,12 @@ exports.updateOrder = catchAsyncErrors( async (req,res,next)=>{
     if(!order){
         return next(new ErrorHandler(`No order found with this ID: ${req.params.id}`,404));
     }
-    // console.log(order)
-    if(order.orderStatus === 'Delevered'){
+    if(order.orderStatus === 'Delivered'){
         return next(new ErrorHandler('You have already delevered order',400))
     }
-    order.orderItems.forEach(async item=>{
-        await updateStock(item.product, item.quantity)
-    })
+    // order.orderItems.forEach(async item=>{
+    //     await updateStock(item.product, item.quantity)
+    // })
 
     order.orderStatus = req.body.status;
     order.deleveredAt = Date.now()
@@ -112,12 +121,7 @@ exports.updateOrder = catchAsyncErrors( async (req,res,next)=>{
     })
 })
 
-async function updateStock(id,quantity){
-    const product = await Product.findById(id);
-    console.log(product);
-    product.stock = product.stock - quantity;
-    await product.save({validateBeforeSave:false});
-}
+
 
 //delete  order by id   /api/v1/admin/order/:id
 exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {

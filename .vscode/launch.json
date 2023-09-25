@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        // Your frontend configuration
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Frontend Debug",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend/index.js"
+        },
+        // Your backend configuration
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Backend Debug",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/backend/server.js"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack Debug",
+            "configurations": ["ffrontend", "Backend Debug"]
+        }
+    ]
+}
