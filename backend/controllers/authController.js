@@ -39,12 +39,12 @@ exports.loginUser  = catchAsyncErrors (async (req,res,next)=>{
         return next( new ErrorHandler('Please enter email and username'));
     }
     //finding user in DB
-    const user = await User.findOne({email}).select('+password'); //usig select bcs in schema we added select false
+    const user = await User.findOne({email}).select('+password');
     if(!user){
         return next( new ErrorHandler('Invalid email or usename',401));
     }
     //checks is password is correct or not
-    const  isPasswordMatched = await user.comparePassword(password)  // comparePassword defined in user model
+    const  isPasswordMatched = await user.comparePassword(password)
     if(!isPasswordMatched){
         return next( new ErrorHandler('Invalid email or usename',401));
     }
