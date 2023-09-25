@@ -16,6 +16,7 @@ const Register = () => {
 
     const [avatar, setAvatar] = useState('')
     const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg')
+    const [errorMessage, setErrorMessage] = useState(null);
 
     // const alert = useAlert()
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Register = () => {
         }
         if(error){
             // const alert=alert(error);
+            setErrorMessage(error)
             dispatch(clearError);
         }
 
@@ -69,7 +71,11 @@ const Register = () => {
                 <div className="col-10 col-lg-5">
                     <form className="shadow-lg" onSubmit={submitHandler} encType='multipart/form-data'>
                         <h1 className="mb-3">Register</h1>
-
+                        {errorMessage && ( // Render error message if it exists
+                            <div className="alert alert-danger mt-4">
+                                {errorMessage}
+                            </div>
+                        )}
                         <div className="form-group">
                             <label htmlFor="email_field">Name</label>
                             <input

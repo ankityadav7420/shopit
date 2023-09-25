@@ -41,6 +41,7 @@ function App() {
 
   const [stripeApiKey, setStripeApiKey]= useState('')
   useEffect(() => {
+    console.log("dispated")
     store.dispatch(loadUser());
   
     async function getStripeApiKey() {
@@ -94,20 +95,9 @@ function App() {
             <Route path="/admin/users" element={<ProtectedRoute isAdmin={true}><UsersList /></ProtectedRoute>} exact />
             <Route path="/admin/user/:id" element={<ProtectedRoute isAdmin={true}><UpdateUser /></ProtectedRoute>} exact />
             <Route path="/admin/reviews" element={<ProtectedRoute isAdmin={true}><ProductReviews /></ProtectedRoute>} exact />
-
-          
-            {/* <Route path="/payment" element={
-                <ProtectedRoute >
-                    {stripeApiKey && 
-                        <Elements stripe={loadStripe(stripeApiKey)} >
-                        <Payment   stripeApiKey />
-                        </Elements>
-                    }
-                </ProtectedRoute>} exact
-            /> */}
             {stripeApiKey &&
               <Route path="/payment" element={
-                <ProtectedRoute isAdmin={true}>
+                <ProtectedRoute >
                     <Elements stripe={loadStripe(stripeApiKey)}>
                         <Payment />
                     </Elements>

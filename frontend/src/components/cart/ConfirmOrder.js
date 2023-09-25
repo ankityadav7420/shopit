@@ -4,6 +4,7 @@ import MetaData from '../layout/MetaData'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 import {saveShippingInfo}  from '../../actions/cartActions'
 import { useNavigate, Link, Navigate } from 'react-router-dom'
+// import Checkoutsteps from './Checkoutsteps'
 import CheckoutSteps from './Checkoutsteps'
 
 const ConfirmOrder = () => {

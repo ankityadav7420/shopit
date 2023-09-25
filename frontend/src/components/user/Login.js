@@ -10,6 +10,7 @@ import MetaData from '../layout/MetaData'
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
 
     // const alert = useAlert()
 
@@ -18,7 +19,6 @@ const Login = () => {
     const navigate = useNavigate();
 
     const { isAuthenticated, error, loading } = useSelector(state => state.auth);
-
     const redirect = location.search ? location.search.split('=')[1] : '/'
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const Login = () => {
             }
         }
         if (error) {
-            alert.error(error);
+            setErrorMessage(error);
             dispatch(clearError());
         }
 
@@ -43,7 +43,7 @@ const Login = () => {
     }
   return (
 <Fragment>
-            {!loading ? <Loader /> : (
+            {/* {loading ? <Loader /> : ( */}
                 <Fragment>
                     <MetaData title={'Login'} />
 
@@ -51,6 +51,11 @@ const Login = () => {
                         <div className="col-10 col-lg-5">
                             <form className="shadow-lg" onSubmit={submitHandler}>
                                 <h1 className="mb-3">Login</h1>
+                                    {errorMessage && ( // Render error message if it exists
+                                        <div className="alert alert-danger mt-4">
+                                            {errorMessage}
+                                        </div>
+                                    )}
                                 <div className="form-group">
                                     <label htmlFor="email_field">Email</label>
                                     <input
@@ -90,7 +95,7 @@ const Login = () => {
 
 
                 </Fragment>
-            )}
+            
         </Fragment>
     )
 }
