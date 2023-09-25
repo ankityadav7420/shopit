@@ -22,7 +22,6 @@ const Register = () => {
     const dispatch = useDispatch();
 
     const { isAuthenticated, error, loading } = useSelector(state => state.auth);
-
     useEffect(()=>{
         if(isAuthenticated){
             navigate('/');
@@ -32,7 +31,7 @@ const Register = () => {
             dispatch(clearError);
         }
 
-    },[dispatch, isAuthenticated, navigate, error, loading])
+    },[dispatch, isAuthenticated, navigate, error])
 
     //submit handler
     const submitHandler = (e) => {
@@ -42,8 +41,7 @@ const Register = () => {
         formData.set('name', name);
         formData.set('email', email);
         formData.set('password', password);
-        // formData.set('avatar', avatar);
-console.log(formData)
+        formData.set('avatar', avatar);
         dispatch(register(formData))
     }
 
@@ -140,7 +138,7 @@ console.log(formData)
                             id="register_button"
                             type="submit"
                             className="btn btn-block py-3"
-                            disabled={loading ? true : false}
+                            // disabled={loading ? true : false}
                         >
                             REGISTER
                         </button>

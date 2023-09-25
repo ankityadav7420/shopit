@@ -7,16 +7,15 @@ const sendEmail = require('../utils/sendEmail');
 const getResetpasswordToken = require('../models/user');
 const crypto = require('crypto');
 const user = require('../models/user');
-const cloudinary = require('cloudinary').v2 // for image upload 
+const cloudinary = require('cloudinary') // for image upload 
 
 //resgister an user;
 exports.registerUser = catchAsyncErrors (async (req,res,next)=>{
     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-        folder:'avatars',
-        width:150,
-        crop:'scale'
-    });
-    // console.log(result,"result")
+        folder: 'avatars',
+        width: 150,
+        crop: "scale"
+    })
     const {name, email, password} = req.body;
 
     const user = await User.create({
@@ -67,7 +66,6 @@ exports.forgotPassword = catchAsyncErrors(async (req,res,next)=>{
     //create reset password url
     const reseturl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`  // remove in production mode
     // const reseturl = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
-    // console.log(reseturl,"reseturl")
     const message= `Your password reset passowrd is as follow:\n\n ${reseturl}\n\nIf you have not requested this then contact admin`
     try{
         await sendEmail({ //sending in testing mode on mailtrap only
@@ -133,24 +131,7 @@ exports.updatePassword = catchAsyncErrors ( async (req, res, next)=>{
     sendToken(user, 200, res);
 })
 
-//update user profile  /api/v1/me/update
-exports.updateProfile = catchAsyncErrors ( async (req, res, next)=>{
-    const newuserData= {
-        name:req.body.name,
-        email: req.body.email
-    }
-    // TO DO Update avtar
-    const user = await User.findByIdAndUpdate(req.user.id, newuserData, {
-        new:true,
-        runValidators:true,
-        useFindAndModify: false
-    })
-    res.status(200).json({
-        succes:true,
-        message:'Profile Updated Succesfully',
-        newuserData
-    })
-})
+
 
 //logut user   /api/v1/logout   setting cookiew null and make it expired
 exports.logout = catchAsyncErrors (async (req,res,next)=>{
@@ -191,40 +172,60 @@ exports.getUserDetails =catchAsyncErrors(async (req,res,next)=>{
     })
 })
 
-//update user profile by admin   /api/v1/admin/user/:user_id
-exports.updateUserProfile = catchAsyncErrors ( async (req, res, next)=>{
-    const newuserData= {
-        name:req.body.name,
+// Update user by admin   =>   /api/v1/admin/user/:id
+exports.updateUser = catchAsyncErrors(async (req, res, next) => {
+
+    const newUserData = {
+        name: req.body.name,
         email: req.body.email,
-        role:req.body.role
+        role: req.body.role
     }
-    // Update avtar
-    if(req.body.avatar !==''){
-        const user= await User.findById(req.user.id)
 
-        const image_id = user.avatar.public_id;
-        const res = await cloudinary.v2.uploader.destroy(image_id)
-
-        const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
-            folder:'avatars',
-            width:150,
-            crop:'scale'
-        });
-        newuserData.avatar = {
-            public_id:result.public_id,
-            url:result.secure_url
-        }
-
-    }
-    const user = await User.findByIdAndUpdate(req.params.id, newuserData, {
-        new:true,
-        runValidators:true,
+    const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+        new: true,
+        runValidators: true,
         useFindAndModify: false
     })
+
     res.status(200).json({
-        succes:true,
-        message:'Profile Updated Succesfully',
-        newuserData
+        success: true,
+        user
+    })
+})
+
+// Update user profile   =>   /api/v1/me/update
+exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email
+    }
+    // Update avatar
+    if (req.body.avatar !== '') {
+        const user = await User.findById(req.user.id)
+
+        const image_id = user.avatar?.public_id;
+        await cloudinary.v2.uploader.destroy(image_id);
+
+        const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: 'avatars',
+            width: 150,
+            crop: "scale"
+        })
+
+        newUserData.avatar = {
+            public_id: result.public_id,
+            url: result.secure_url
+        }
+    }
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true,
+        user
     })
 })
 
@@ -235,6 +236,8 @@ exports.deleteUser =catchAsyncErrors(async (req,res,next)=>{
         return next( new ErrorHandler(`User doese not found with id: ${req.params.id}`,404))
     }
     // TO DO remove avtar
+    const image_id = user.avatar.public_id;
+    await cloudinary.v2.uploader.destroy(image_id)
     // await user.remove();
     await User.findOneAndDelete({ _id: req.params.id });
     res.status(200).json({

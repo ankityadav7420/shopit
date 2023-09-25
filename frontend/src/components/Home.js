@@ -22,19 +22,32 @@ const Home = () => {
 
     const [currentPage, setCurrentPage] =useState(1);
     const [price, setPrice] = useState([1,1000]);
+    const [category, setCategory] = useState('')
+    const [rating, setRating] = useState(0)
 
+    const categories = [
+        'Electronics',
+        'Cameras',
+        'Laptops',
+        'Accessories',
+        'Headphones',
+        'Food',
+        "Books",
+        'Clothes/Shoes',
+        'Beauty/Health',
+        'Sports',
+        'Outdoor',
+        'Home'
+    ]
     const params = useParams();
     const dispatch = useDispatch();
     const  {loading, products, error, productsCount} = useSelector(state=>state.products)
-    // console.log(products)
-
     const keyword =params.keyword;
     useEffect(()=>{
         if(error){
             return error;
-            // console.log(error)
         }
-        dispatch(getProducts(keyword,currentPage, price));
+        dispatch(getProducts(keyword, currentPage, price));
         
     },[dispatch,keyword, error, currentPage, price])
 
@@ -43,7 +56,7 @@ const Home = () => {
         {loading? <Loader /> :(
             <Fragment>
                  <MetaData title={'Buy Best Product Online'} /> 
-                <h1 id="products_heading">Latest Products</h1>
+                <h1 id="products_heading">Latest Products {products.length}</h1>
 
                 <section id="products" className="container mt-5">
                 <div className="row">

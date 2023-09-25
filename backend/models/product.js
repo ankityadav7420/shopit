@@ -71,11 +71,11 @@ const productSchema = new mongoose.Schema({
     },
     reviews:[
         {
-            user:{ //refrencing user for adding created of product
-                type:mongoose.Schema.ObjectId,
-                ref:'User',
-                required:true
-            },
+            // user:{ //refrencing user for adding created of product
+            //     type:mongoose.Schema.ObjectId,
+            //     ref:'User',
+            //     required:true
+            // },
             name:{
                 type:String,
                 required:true
@@ -90,11 +90,11 @@ const productSchema = new mongoose.Schema({
             }
         }
     ],
-    user:{ //refrencing user for adding created of product
-        type:mongoose.Schema.ObjectId,
-        ref:'User',
-        required:true
-    },
+    // user:{ //refrencing user for adding created of product
+    //     type:mongoose.Schema.ObjectId,
+    //     ref:'User',
+    //     required:true
+    // },
     createdAt:{
         type:Date,
         default:Date.now

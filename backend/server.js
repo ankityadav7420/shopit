@@ -2,7 +2,7 @@ const app = require('./app');
 const dotenv = require('dotenv');
 const connectDatabase =require('./config/database');
 const cloudinary = require('cloudinary').v2
-
+const cors = require('cors')
 
 //handel uncought exception
 process.on('uncaughtException',err=>{
@@ -26,6 +26,10 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
+app.use(cors({
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11) choke on 204
+}));
 
 //server listening
 const server = app.listen(process.env.PORT, ()=>{
@@ -34,8 +38,8 @@ const server = app.listen(process.env.PORT, ()=>{
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-    console.error(`ERROR: ${err.message}`);
-    console.error("Shutting down server due to unhandledRejection");
+    console.log(`ERROR: ${err.message}`);
+    console.log("Shutting down server due to unhandledRejection");
     server.close(() => {
         process.exit(1);
     });

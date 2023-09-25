@@ -26,11 +26,11 @@ const NewPassword = () => {
             alert(error)
         }
         if(success){
-            alert(message,success)
+            alert(message, success)
             navigate('/login');
         }
 
-    },[dispatch, error, navigate, success])
+    },[dispatch, error, navigate, message, success])
 
     //submit handler
     const submitHandler = (e) => {

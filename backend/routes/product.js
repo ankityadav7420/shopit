@@ -3,7 +3,9 @@ const router = express.Router();
 
 
 //import all controller 
-const {getProducts,
+const {
+     getProducts,
+     getAdminProducts,
      newProduct,
      getSingleProduct,
      updateProduct,
@@ -20,6 +22,8 @@ const {isAuthenticatedUser, authorizeRoles} = require('../middlewares/auth')
 
 //product routing
 router.route('/product').get(getProducts); // get allproduct
+router.route('/admin/products').get(getAdminProducts); // get all admin product  
+
 router.route('/product/:id').get(getSingleProduct); //get singe product by id
 router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), newProduct); // post new product
 router.route('/admin/product/:id').put(isAuthenticatedUser, authorizeRoles('admin'), updateProduct); // update Product  product by id

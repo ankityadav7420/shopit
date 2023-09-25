@@ -24,7 +24,7 @@ const seedProducts = async () => {
 
         process.exit(); // Exit the script after seeding is done
     } catch (error) {
-        console.error(error.message);
+        console.log(error.message);
         process.exit(1); // Exit with an error code
     }
 };
